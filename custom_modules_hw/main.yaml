@@ -1,0 +1,30 @@
+---
+- name: Check site's availability
+  hosts: test
+  gather_facts: false
+  tasks:
+    - name: Install 'requests' module 
+      pip:
+        name:
+          - requests
+    
+    - name: Check site from python module
+      healthcheck_py:
+        addr: ya.ru
+        tls: True
+      register: py_result
+
+    - name: print result healthcheck_py
+      debug:
+        msg: "{{ py_result }}"
+    
+    - name: Check site from bash module
+      healthcheck_sh:
+        addr: ya.ru
+        tls: True
+      register: sh_result
+
+    - name: print result healthcheck_sh
+      debug:
+        msg: "{{ sh_result }}"
+      

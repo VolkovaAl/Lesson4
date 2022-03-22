@@ -1,0 +1,12 @@
+---
+- name: Convert mac address
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  vars:
+    string: ab3cd266312k
+  tasks:
+    - name: convert mac address
+      debug:
+        msg: "{{ string | convert_mac() }}"
+
