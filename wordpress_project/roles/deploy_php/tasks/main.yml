@@ -1,0 +1,23 @@
+---
+- name: Put repo files to /etc/yum.repos.d/ directory
+  copy:
+    src: "{{ copy_files }}"
+    dest: "/etc/yum.repos.d"
+    owner: root
+    group: root
+    mode: 0644
+  loop: "{{ repo_files }}"
+  loop_control:
+    loop_var: copy_files
+
+- name: Install packages from 'php_packages_list'
+  yum:
+    name: "{{ php_packages }}"
+  loop: "{{ php_packages_list }}"
+  loop_control:
+    loop_var: php_packages
+
+- name: Remove default /etc/php-fpm.d/www.conf file
+  file:
+    path: /etc/php-fpm.d/www.conf
+    state: absent

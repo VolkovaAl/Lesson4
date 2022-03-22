@@ -1,0 +1,27 @@
+---
+- name: Install 'cryptography' package
+  pip:
+    name:
+      - cryptography
+
+- name: Generate an OpenSSL private key
+  openssl_privatekey:
+    path: "/etc/ssl/{{ ansible_host }}_privkey.pem"
+    size: "{{ key_size }}"
+    type: "{{ key_type }}"
+
+- name: Generate an OpenSSL Certificate Signing Request with Subject information
+  openssl_csr:
+    path: "/etc/ssl/{{ ansible_host }}.csr"
+    privatekey_path: "/etc/ssl/{{ ansible_host }}_privkey.pem"
+    country_name: "{{ country_name }}"
+    organization_name: "{{ organization_name }}"
+    email_address: "{{ email_address }}"
+    common_name: "{{ ansible_host }}"
+
+- name: Generate a Self Signed OpenSSL certificate
+  openssl_certificate:
+    path: "/etc/ssl/{{ ansible_host }}_cert.pem"
+    privatekey_path: "/etc/ssl/{{ ansible_host }}_privkey.pem"
+    csr_path: "/etc/ssl/{{ ansible_host }}.csr"
+    provider: selfsigned

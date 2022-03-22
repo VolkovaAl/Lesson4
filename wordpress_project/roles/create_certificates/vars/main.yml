@@ -1,0 +1,7 @@
+---
+key_size: 4096
+passphrase:
+key_type: RSA
+country_name: KE
+email_address: admin@srv
+organization_name: srv

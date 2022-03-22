@@ -1,0 +1,47 @@
+- name: deploy web-server
+  hosts: test
+  become: false
+  tasks:
+    - name: create certificates
+      import_role:
+        name: create_certificates
+      become: true
+      vars:
+        dir: '/vars/main.yaml'
+
+    - name: deploy nginx
+      import_role:
+        name: deploy_nginx
+      become: true
+      vars:
+        dir: '/vars/main.yaml'
+
+    - name: deploy mariadb
+      import_role:
+        name: deploy_mariadb
+      become: true
+      vars:
+        dir: '/vars/main.yaml'
+
+    - name: deploy php
+      import_role:
+        name: deploy_php
+      become: true
+      vars:
+        dir: '/vars/main.yaml'
+
+    - name: deploy wordpress
+      import_role:
+        name: deploy_wordpress
+      become: true
+      vars:
+        dir: '/vars/main.yaml'
+
+  post_tasks:
+    - name: check web site from control server
+      uri:
+        url: "https://{{ ansible_host }}"
+        validate_certs: false
+        return_content: true
+      register: example_webpage_out
+      failed_when: example_webpage_out.status != 200

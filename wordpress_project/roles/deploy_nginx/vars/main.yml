@@ -1,0 +1,4 @@
+---
+nginx_tls_port: 443
+nginx_no_tls_port: 80
+server_hostname: 192.168.144.133
